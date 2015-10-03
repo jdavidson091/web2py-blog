@@ -88,5 +88,22 @@ auth.settings.reset_password_requires_verification = True
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
 
+
+db.define_table('blog_post',
+                Field('title', 'string'),
+                Field('owner_id', 'reference auth_user'),
+                Field('body', 'text'),
+                Field('date', 'datetime'),
+                Field('comments', 'list:reference comment')
+                )
+
+db.define_table('comment',
+                Field('owner_id', 'reference auth_user'),
+                Field('parent_post', 'reference blog_post'),
+                Field('body', 'text'),
+                Field('date', 'datetime'),
+                )
+
+
 ## after defining tables, uncomment below to enable auditing
 # auth.enable_record_versioning(db)
