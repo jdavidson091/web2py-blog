@@ -1,5 +1,11 @@
+import datetime
+
+
+@auth.requires_login()
 def home():
-    return {'a': 'Hello World'}
+    current_user = db.auth_user(db.auth_user.id == auth.user_id)
+    blog_posts = db(db.blog_post.author_user == current_user.id).select()
+    return {'blog_posts': blog_posts}
 
 
 def blog_post():
@@ -10,25 +16,30 @@ def blog_post():
             'comments': c}
 
 
+@auth.requires_login()
 def new_post():
-    new_post_form = SQLFORM(db.blog_post,
-                            fields=['title', 'body'],
-                            labels={'title': 'Post Title:',
-                                    'body': 'Content:'},
-                            _action=URL('blog_post')
-                            )
+    current_user = db.auth_user(db.auth_user.id == auth.user_id)
+    form = SQLFORM(db.blog_post,
+                   fields=['title', 'body'],
+                   labels={'title': 'Post Title:',
+                           'body': 'Content:'},
+                   )
+    form.vars.author_user = current_user.id
+    form.vars.created_date = datetime.datetime.now()
+    form.vars.comments = []
+
     # form.add_button('Back', URL('other_page'))
 
-    validate_form(new_post_form)
-    # if new_post_form.process(keepvalues=True).accepted:
-    #     redirect('blog_post')
-    return dict(form=new_post_form)
+    validate_form(form)
+    if form.process(keepvalues=True).accepted:
+        redirect('new_post')
+    return dict(form=form)
 
 
 def validate_form(blog_post_form):
     if blog_post_form.accepts(request, session):
         response.flash = 'form accepted'
     elif blog_post_form.errors:
-        response.flash = 'form has errors'
+        response.flash = 'one or more fields are blank'
     else:
         response.flash = 'please fill the form'
