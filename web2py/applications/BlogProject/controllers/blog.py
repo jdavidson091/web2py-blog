@@ -9,11 +9,25 @@ def home():
 
 
 def blog_post():
-    b = db(db.blog_post.id == 1).select()
-    c = None
 
-    return {'blog_post': b,
-            'comments': c}
+    current_post = []
+    author_name = ""
+    if len(request.args) != 1:
+        response.flash = 'Invalid number of args passed for blog post'
+        redirect(URL('home'))
+    try:
+        current_post = db(db.blog_post.id == request.args[0]).select().first()
+        author = db.auth_user(db.auth_user.id == current_post.author_user)
+        author_name = '%s %s' % (author.first_name, author.last_name)
+
+    except Exception as e:
+        response.flash = str(e)
+        redirect(URL('home'))
+
+
+    return {'current_post': current_post,
+            'author': author_name,
+            }
 
 
 @auth.requires_login()

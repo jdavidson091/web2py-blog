@@ -1,40 +1,14 @@
 {{extend 'layout.html'}}
 {{# Expects: blog_post, [blog_comment], }}
+{{# =BEAUTIFY(current_post)}}
+
+<h1>{{=current_post.title}}</h1>
+<h2>By {{=author}}</h2>
+<h3>On {{=str(current_post.created_date)}}</h3>
+<p>
+    {{=current_post.body}}
+</p>
 
 
-<p>
-   Blog post page!:<br>
-    Show author, title, content, add comments button comments<br>
-    Comments as sub-views?<br>
-
-    Maybe insert a python loop here, "for comment in comments:"<br>
-</p>
-<p>
-    <h1>{{=blog_post.title}}</h1>
-        <h3>By {{author_user.email}}</h3>
-    <p>{{=blog_post.body}}<p>
-    <p>{{=blog.created_date}}<p>
-</p>
-Insert new comments here??
-<p>
-    <h3>Comments:</h3>
-    <ul>
-        {{for blog_comment in comments:}}
-            <li>
-                <div class="list">
-                    <div class="list-header">
-                        {{blog_comment.author_user.email}}
-                    </div>
-                    <div class="content">
-                        {{=blog_comment.body}}
-                    </div>
-                     <div class="content">
-                        {{=blog_comment.created_date}}
-                    </div>
-                </div>
-            </li>
-            {{pass}}
-    </ul>
-</p>
 
 
