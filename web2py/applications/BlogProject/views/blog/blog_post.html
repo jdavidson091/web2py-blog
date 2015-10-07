@@ -9,6 +9,16 @@
     {{=current_post.body}}
 </p>
 
+        Comments here
+
+{{for post in comments:}}
+<div class="comment_post">
+  On {{=post.created_date}} {{=post.author_user.first_name}}
+  says <span class="post_body">{{=post.body}}</span>
+</div>
+{{pass}}
+
+{{=LOAD(f='new_comment.load',ajax=True, args=[current_post])}}
 
 
 

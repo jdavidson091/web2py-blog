@@ -9,9 +9,10 @@ def home():
 
 
 def blog_post():
-
     current_post = []
+    comments = []
     author_name = ""
+    # form = None
     if len(request.args) != 1:
         response.flash = 'Invalid number of args passed for blog post'
         redirect(URL('home'))
@@ -19,15 +20,34 @@ def blog_post():
         current_post = db(db.blog_post.id == request.args[0]).select().first()
         author = db.auth_user(db.auth_user.id == current_post.author_user)
         author_name = '%s %s' % (author.first_name, author.last_name)
+        # comments = db(db.blog_comment).select().first() or []
 
     except Exception as e:
         response.flash = str(e)
         redirect(URL('home'))
 
-
     return {'current_post': current_post,
             'author': author_name,
+            'comments': comments,
+            # 'form': form,
             }
+
+
+def new_comment():
+    current_post = request.args[0]
+
+    form = SQLFORM(db.blog_comment,
+                   fields=['body'],
+                   labels={'body': 'Comment:'},
+                   )
+    form.vars.author_user = auth.user
+    form.vars.parent_post = current_post
+    form.vars.created_date = datetime.datetime.now()
+
+    if form.process().accepted:
+        response.flash = 'Thank you'
+        response.js = "jQuery('#%s').hide()" % request.cid
+    return dict(form=form)
 
 
 @auth.requires_login()
@@ -42,11 +62,11 @@ def new_post():
     form.vars.created_date = datetime.datetime.now()
     form.vars.comments = []
 
-    # form.add_button('Back', URL('other_page'))
+    form.add_button('Back', URL('home'))
 
-    validate_form(form)
+    # validate_form(form)
     if form.process(keepvalues=True).accepted:
-        redirect('new_post')
+        redirect('home')
     return dict(form=form)
 
 

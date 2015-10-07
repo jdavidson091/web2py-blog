@@ -94,7 +94,7 @@ db.define_table('blog_post',
                 Field('author_user', 'reference auth_user'),
                 Field('body', 'text', requires=IS_NOT_EMPTY()),
                 Field('created_date', 'datetime', requires=IS_NOT_EMPTY()),
-                Field('comments', 'list:reference blog_comment')
+                Field('comments', 'list:reference blog_comment')  # TODO: maybe not needed
                 )
 
 db.define_table('blog_comment',

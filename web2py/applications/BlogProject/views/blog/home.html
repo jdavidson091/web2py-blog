@@ -1,18 +1,13 @@
 {{extend 'layout.html'}}
 <body>
-   Here, we should show: <br>
-    1. new post link<br>
-    2. list of previous posts for user<br>
-        - python: for post in posts, show title/date as hyperlink, etc<br>
-
-    <ul>
+   Homepage<br><br>
+   <div id="b">{{=A('New Post', _href=URL('new_post'))}}</div><br>
+   Old posts:
         {{def itemize_link(link): return LI(A(link, _href="http://" + link))}}
         {{for blog_post in blog_posts:}}
-            {{post_title = blog_post.title + "sdfsdf " + str(blog_post.created_date)}}
+            {{post_title = '%s %s' % (blog_post.title, str(blog_post.created_date))}}
             <li>{{=A(post_title, _href=URL('blog_post', args=[blog_post.id]))}}
             </li>
             {{pass}}
     </ul>
 </body>
-
-
