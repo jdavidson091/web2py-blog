@@ -10,10 +10,9 @@
 </p>
 
         Comments here
-
 {{for post in comments:}}
 <div class="comment_post">
-  On {{=post.created_date}} {{=post.author_user.first_name}}
+  On {{=post.created_date}} {{=post.author_user_id}}
   says <span class="post_body">{{=post.body}}</span>
 </div>
 {{pass}}

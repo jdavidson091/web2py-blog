@@ -91,15 +91,15 @@ auth.settings.reset_password_requires_verification = True
 
 db.define_table('blog_post',
                 Field('title', 'string', requires=IS_NOT_EMPTY()),
-                Field('author_user', 'reference auth_user'),
+                Field('author_user_id', 'integer'),
                 Field('body', 'text', requires=IS_NOT_EMPTY()),
                 Field('created_date', 'datetime', requires=IS_NOT_EMPTY()),
-                Field('comments', 'list:reference blog_comment')  # TODO: maybe not needed
+                # Field('comments', 'list:reference blog_comment')  # TODO: maybe not needed
                 )
 
 db.define_table('blog_comment',
-                Field('author_user', 'reference auth_user'),
-                Field('parent_post', 'reference blog_post'),
+                Field('author_user_id', 'integer', requires=IS_NOT_EMPTY()),
+                Field('blog_post_id', 'integer', requires=IS_NOT_EMPTY()),
                 Field('body', 'text', requires=IS_NOT_EMPTY()),
                 Field('created_date', 'datetime', requires=IS_NOT_EMPTY()),
                 )
