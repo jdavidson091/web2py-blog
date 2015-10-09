@@ -1,8 +1,18 @@
 {{extend 'layout.html'}}
 <body>
-   Homepage<br><br>
-   <div id="b">{{=A('New Post', _href=URL('new_post'))}}</div><br>
+{{ author = db.auth_user(db.auth_user.id == author_id)}}
+{{ author_name = '%s %s' % (author.first_name, author.last_name)}}
+
+   Homepage for {{=author_name}}<br><br>
+
+    {{if int(author_id) == int(auth.user_id):}}
+        <div id="b">{{=A('New Post', _href=URL('new_post'))}}</div><br>
+    {{pass}}
+
+
    Old posts:
+
+
         {{def itemize_link(link): return LI(A(link, _href="http://" + link))}}
         {{for blog_post in blog_posts:}}
             {{post_title = '%s %s' % (blog_post.title, str(blog_post.created_date))}}

@@ -3,8 +3,13 @@ import datetime
 
 @auth.requires_login()
 def home():
-    blog_posts = db(db.blog_post.author_user_id == auth.user.id).select()
-    return {'blog_posts': blog_posts}
+    author_id = auth.user_id
+    if request.args:
+        author_id = request.args[0]
+
+    blog_posts = db(db.blog_post.author_user_id == author_id).select()
+    return {'blog_posts': blog_posts,
+            'author_id': author_id}
 
 
 def blog_post():

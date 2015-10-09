@@ -7,7 +7,7 @@
 <article id="post" class="post page type-page status-publish hentry">
 <header>
 <h2>{{=current_post.title}}</h2>
-<h5><i>{{=author}}</i></h5>
+<h5><i> {{=A(author, _href=URL('home', args=[current_post.author_user_id]))}}</i></h5>
 <h5><i>{{=current_post.created_date}}</i></h5>
 </header><br>
 <div class="entry-content">
@@ -26,7 +26,13 @@
     <div class="media-body">
         <div class="media-body-wrap panel panel-default">
             <div class="panel-heading">
-                <h5 class="media-heading"><cite class="fn">{{=post.author_user_id}}</cite> <span class="says">says:</span></h5>
+                {{ comment_author = db.auth_user(db.auth_user.id == post.author_user_id)}}
+                {{ comment_author_name = '%s %s' % (comment_author.first_name, comment_author.last_name)}}
+
+                <h5 class="media-heading">
+                    <cite class="fn"> {{=A(comment_author_name, _href=URL('home', args=[comment_author.id]))}}</cite>
+                    <span class="says">says:</span>
+                </h5>
                 <div class="comment-meta">
                     <time datetime="2007-09-04T10:49:03+00:00">
                         {{=post.created_date}}
