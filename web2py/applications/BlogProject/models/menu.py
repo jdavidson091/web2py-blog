@@ -5,12 +5,8 @@
 ## Customize your APP title, subtitle and menus here
 #########################################################################
 
-home_href = ''
-if auth.is_logged_in():
-    home_href = 'home'
-
 response.logo = A(B('Not Your Momma\'s Blog Site'),XML(''),
-                  _class="navbar-brand",_href=home_href,
+                  _class="navbar-brand",_href=URL('blog', 'home'),
                   _id="web2py-logo")
 response.title = request.application.replace('_',' ').title()
 response.subtitle = ''

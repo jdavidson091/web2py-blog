@@ -37,6 +37,9 @@
                     <time datetime="2007-09-04T10:49:03+00:00">
                         {{=post.created_date}}
                     </time>
+                    {{if able_to_delete_comments:}}
+                    <a href="{{=URL('delete_comment', args=[post.id, current_post.id])}}" class="btn btn-danger" role="button">Delete</a>
+                    {{pass}}
                 </div>
             </div>
             <div class="comment-content panel-body">
