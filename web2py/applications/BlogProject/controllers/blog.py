@@ -110,9 +110,9 @@ def edit_post():
 
 @auth.requires_login()
 def delete_comment():
-    comment_to_delete = db.blog_comment(request.args(0)) or redirect(URL('home'))
-    blog_post = db.blog_comment(request.args(1)) or redirect(URL('home'))
+    comment_to_delete = db.blog_comment(request.args[0]) or redirect(URL('home'))
+    b_post = db.blog_post(request.args[1]) or redirect(URL('home'))
 
     db(db.blog_comment.id == comment_to_delete.id).delete()
 
-    redirect(URL('blog_post', args=[blog_post.id]))
+    redirect(URL('blog_post', args=[b_post.id]))
