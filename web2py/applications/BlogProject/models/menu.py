@@ -5,7 +5,7 @@
 ## Customize your APP title, subtitle and menus here
 #########################################################################
 
-response.logo = A(B('Not Your Momma\'s Blog Site'),XML(''),
+response.logo = A(B('Bloggr'), XML(''),
                   _class="navbar-brand",_href=URL('blog', 'home'),
                   _id="web2py-logo")
 response.title = request.application.replace('_',' ').title()

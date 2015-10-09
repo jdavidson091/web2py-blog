@@ -6,28 +6,41 @@
 {{ author = db.auth_user(db.auth_user.id == author_id)}}
 {{ author_name = '%s %s' % (author.first_name, author.last_name)}}
 
-   Homepage for {{=author_name}}<br><br>
+
+<div class="container">
+  <div class="jumbotron ">
+    <h1>{{=author_name}}'s Homepage</h1>
+    <p>
+        {{len_posts = len(blog_posts)}}
+            {{if len_posts == 1:}}
+            {{=len_posts}} post written
+            {{else:}}
+            {{=len(blog_posts)}} posts written
+            {{pass}}
+    </p>
     {{if auth.is_logged_in():}}
     {{if int(author_id) == int(auth.user_id):}}
-        <div id="b">{{=A('New Post', _href=URL('new_post'))}}</div><br>
+      <a href="{{=URL('new_post')}}" class="btn btn-info" role="button">New Post</a>
     {{pass}}
     {{pass}}
 
+  </div>
+{{for blog_post in blog_posts:}}
+  <div class="row">
+    <div class="col-sm-8">
+      <h3>{{=A(blog_post.title, _href=URL('blog_post', args=[blog_post.id]))}}</h3>
 
-   Old posts:
-
-
-        {{for blog_post in blog_posts:}}
-            {{post_title = '%s %s' % (blog_post.title, str(blog_post.created_date))}}
-            <li>
-                {{=A(post_title, _href=URL('blog_post', args=[blog_post.id]))}}
+            <p><i>Posted on {{=str(blog_post.created_date)}}</i></p>
 
                     {{if auth.is_logged_in():}}
                     {{if int(author_id) == int(auth.user_id):}}
                         <a href="{{=URL('edit_post', args=[blog_post.id])}}" class="btn btn-info" role="button">Edit</a>
                     {{pass}}
                     {{pass}}
-            </li>
-            {{pass}}
-    </ul>
+
+    </div>
+  </div>
+{{pass}}
+</div>
+
 </body>
