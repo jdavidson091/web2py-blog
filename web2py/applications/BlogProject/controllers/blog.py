@@ -19,10 +19,8 @@ def blog_post():
         current_post = db(db.blog_post.id == request.args[0]).select().first()
         author = db.auth_user(db.auth_user.id == current_post.author_user_id)
         author_name = '%s %s' % (author.first_name, author.last_name)
-
         comments = db(db.blog_comment.blog_post_id == current_post.id).select()
-        for comment in comments:
-            print comment.id
+
     except Exception as e:
         response.flash = str(e)
         redirect(URL('home'))
@@ -35,20 +33,23 @@ def blog_post():
 
 
 def new_comment():
-    current_post_id = int(request.env.http_referer[-1])
+    if auth.is_logged_in():
+        current_post_id = int(request.env.http_referer[-1])
 
-    form = SQLFORM(db.blog_comment,
-                   fields=['body'],
-                   labels={'body': 'Comment:'},
-                   )
-    form.vars.author_user_id = auth.user.id
-    form.vars.blog_post_id = current_post_id
-    form.vars.created_date = datetime.datetime.now()
+        form = SQLFORM(db.blog_comment,
+                       fields=['body'],
+                       labels={'body': 'Comment:'},
+                       )
+        form.vars.author_user_id = auth.user.id
+        form.vars.blog_post_id = current_post_id
+        form.vars.created_date = datetime.datetime.now()
 
-    if form.process(keepvalues=True).accepted:
-        response.flash = 'Comment posted.'
-        response.js = "jQuery('#%s').hide()" % request.cid
-    return dict(form=form)
+        if form.process(keepvalues=True).accepted:
+            response.flash = 'Comment posted, refresh page'
+            response.js = "jQuery('#%s').hide()" % request.cid
+        return dict(form=form)
+    else:
+        return {}
 
 
 @auth.requires_login()
@@ -67,12 +68,3 @@ def new_post():
     if form.process(keepvalues=True).accepted:
         redirect('home')
     return dict(form=form)
-
-
-# def validate_form(blog_post_form):
-#     if blog_post_form.accepts(request, session):
-#         response.flash = 'form accepted'
-#     elif blog_post_form.errors:
-#         response.flash = 'one or more fields are blank'
-#     else:
-#         response.flash = 'please fill the form'

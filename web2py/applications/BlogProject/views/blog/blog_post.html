@@ -1,23 +1,51 @@
 {{extend 'layout.html'}}
-{{# Expects: blog_post, [blog_comment], }}
-{{# =BEAUTIFY(current_post)}}
 
-<h1>{{=current_post.title}}</h1>
-<h2>By {{=author}}</h2>
-<h3>On {{=str(current_post.created_date)}}</h3>
-<p>
-    {{=current_post.body}}
-</p>
-
-        Comments here
-{{for post in comments:}}
-<div class="comment_post">
-  On {{=post.created_date}} {{=post.author_user_id}}
-  says <span class="post_body">{{=post.body}}</span>
+<div class="main-content">
+<div class="container">
+<div class="row">
+<div id="content" class="main-content-inner col-sm-12 col-md-8">
+<article id="post" class="post page type-page status-publish hentry">
+<header>
+<h2>{{=current_post.title}}</h2>
+<h5><i>{{=author}}</i></h5>
+<h5><i>{{=current_post.created_date}}</i></h5>
+</header><br>
+<div class="entry-content">
+<div class="entry-content-thumbnail">
 </div>
+{{=current_post.body}}
+</div>
+</article>
+
+<br>
+<h3>Comments:</h3>
+{{for post in comments:}}
+<article id="div-comment-3" class="comment-body media">
+    <a class="pull-left" href="#">
+    <img alt='' src='//2.gravatar.com/avatar/ef331c6e33890a8fa68e36cb7a7f0f87?s=50&#038;d=mm&#038;r=g' srcset='http://2.gravatar.com/avatar/ef331c6e33890a8fa68e36cb7a7f0f87?s=100&amp;d=mm&amp;r=g 2x' class='avatar avatar-50 photo' height='50' width='50'/> </a>
+    <div class="media-body">
+        <div class="media-body-wrap panel panel-default">
+            <div class="panel-heading">
+                <h5 class="media-heading"><cite class="fn">{{=post.author_user_id}}</cite> <span class="says">says:</span></h5>
+                <div class="comment-meta">
+                    <time datetime="2007-09-04T10:49:03+00:00">
+                        {{=post.created_date}}
+                    </time>
+                </div>
+            </div>
+            <div class="comment-content panel-body">
+                <p>{{=post.body}}</p>
+            </div>
+        </div>
+    </div>
+</article>
 {{pass}}
 
 {{=LOAD(f='new_comment.load',ajax=True, args=[current_post])}}
 
+</div>
+</div>
+</div>
+</div>
 
 
